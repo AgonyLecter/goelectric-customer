@@ -7,53 +7,63 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="logo192.png" type="image/png">
+    <link rel="icon" href="logo.ico" type="image/ico">
     <style>
-        body { padding-top: 20px; background-color: #f8f9fa; font-family: 'Arial', sans-serif; margin: 0; font-size: 16px; color: #333; }
-        #logo { width: 120px; margin-bottom: 20px; transition: transform 0.3s; }
-        #logo:hover { transform: scale(1.05); }
-        .help-button, .language-select { position: fixed; bottom: 20px; right: 20px; font-size: 16px; background: #007bff; color: white; padding: 8px 15px; border-radius: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: background 0.3s, transform 0.3s; }
-        .language-select { right: 140px; cursor: pointer; }
-        .help-button:hover, .language-select:hover { background: #0056b3; transform: scale(1.1); }
+        body { padding-top: 20px; background-color: #f0f2f5; font-family: 'Arial', sans-serif; margin: 0; font-size: 16px; color: #333; }
+        #logo { width: 150px; margin-bottom: 20px; transition: transform 0.3s; }
+        #logo:hover { transform: scale(1.1); }
+        .help-button, .language-select { position: fixed; bottom: 20px; right: 20px; font-size: 18px; background: linear-gradient(135deg, #007bff, #00d4ff); color: white; padding: 10px 20px; border-radius: 25px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: background 0.3s, transform 0.3s; }
+        .language-select { right: 160px; cursor: pointer; }
+        .help-button:hover, .language-select:hover { background: linear-gradient(135deg, #0056b3, #008bff); transform: scale(1.1); }
         .hidden { display: none; }
         .fade-in { animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        select.custom-select { border-radius: 20px; transition: box-shadow 0.3s; }
-        select.custom-select:focus { box-shadow: 0 0 8px #007bff; }
+        select.custom-select { border-radius: 25px; transition: box-shadow 0.3s; }
+        select.custom-select:focus { box-shadow: 0 0 10px #007bff; }
         .footer { text-align: center; margin-top: 20px; font-size: 14px; }
+        .info-tooltip { position: relative; display: inline-block; }
+        .info-tooltip .info-tooltiptext { visibility: hidden; width: 220px; background-color: #f9f9f9; color: #333; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -110px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: visibility 0.3s; }
+        .info-tooltip:hover .info-tooltiptext { visibility: visible; }
+        .clock { font-size: 1.5em; font-weight: bold; margin-top: 20px; color: #007bff; animation: fadeIn 1s; }
     </style>
 </head>
 <body>
     <div class="container">
-        <select id="languageSelect" class="form-select custom-select mb-3" onchange="changeLanguage()">
-            <option value="EN">English</option>
-            <option value="FR">Français</option>
-            <option value="IT">Italiano</option>
-            <option value="DE">Deutsch</option>
-        </select>
         <div class="text-center">
             <img src="logo.png" alt="Logo" id="logo" class="img-fluid fade-in">
-            <div id="current-time" class="fade-in"></div>
+            <div id="current-time" class="fade-in clock"></div>
         </div>
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-6">
-                <h1 id="mainTitle" class="mb-3 text-center fade-in">Verify Scooter Status</h1>
+                <h1 id="mainTitle" class="mb-3 text-center fade-in">Verifica Stato Scooter</h1>
                 <div class="mb-3 fade-in">
-                    <label for="scooterCodeInput" id="inputLabel" class="form-label" data-alert-msg="">Enter Scooter Code</label>
-                    <input type="text" class="form-control" id="scooterCodeInput" placeholder="Scooter Code">
+                    <label for="scooterCodeInput" id="inputLabel" class="form-label">Inserisci il Codice Scooter</label>
+                    <div class="info-tooltip">
+                        <input type="text" class="form-control" id="scooterCodeInput" placeholder="SCOOTXX">
+                        <span class="info-tooltiptext" id="tooltipText">Codice formato da "SCOOT" seguito da due cifre (es. SCOOT01)</span>
+                    </div>
                 </div>
-                <button class="btn btn-primary w-100 fade-in" onclick="checkScooterStatus()">Verify</button>
+                <button id="verifyButton" class="btn btn-primary w-100 fade-in" onclick="checkScooterStatus()">Verifica</button>
                 <div id="scooterDetails" class="mt-4 hidden fade-in">
-                    <h3>Details</h3>
-                    <p><strong>Name:</strong> <span id="scooterName"></span></p>
-                    <p><strong>Return Date:</strong> <span id="scooterReturnDate"></span></p>
-                    <p><strong>Return Time:</strong> <span id="scooterReturnTime"></span></p>
-                    <p><strong>Status:</strong> <span id="scooterStatus"></span></p>
+                    <h3>Dettagli</h3>
+                    <p><strong>Nome:</strong> <span id="scooterName"></span></p>
+                    <p><strong>Data di Ritorno:</strong> <span id="scooterReturnDate"></span></p>
+                    <p><strong>Orario di Ritorno:</strong> <span id="scooterReturnTime"></span></p>
+                    <p><strong>Stato:</strong> <span id="scooterStatus"></span></p>
                 </div>
-                <div class="footer">© 2024 GoElectric, All rights reserved</div>
+                <div class="footer">© 2024 GoElectric, Tutti i diritti riservati</div>
                 <a href="tel:+1234567890" class="help-button">
                     <i class="fas fa-phone-alt"></i>
                 </a>
+                <div class="language-select" onclick="toggleLanguageDropdown()">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <select id="languageSelect" class="form-select custom-select mb-3 hidden" onchange="changeLanguage()">
+                    <option value="EN">English</option>
+                    <option value="FR">Français</option>
+                    <option value="IT">Italiano</option>
+                    <option value="DE">Deutsch</option>
+                </select>
             </div>
         </div>
     </div>
@@ -76,6 +86,10 @@
 
         function checkScooterStatus() {
             var codeInput = document.getElementById('scooterCodeInput').value;
+            if (!/^SCOOT\d{2}$/.test(codeInput)) {
+                alert(document.getElementById('inputLabel').dataset.alertMsg);
+                return;
+            }
             dbRef.orderByChild('code').equalTo(codeInput).once('value', snapshot => {
                 if (snapshot.exists()) {
                     snapshot.forEach(function(childSnapshot) {
@@ -95,15 +109,28 @@
         function changeLanguage() {
             var lang = document.getElementById('languageSelect').value;
             var texts = {
-                EN: { title: "Verify Scooter Status", label: "Enter Scooter Code", alertMsg: "No scooter found with this code." },
-                FR: { title: "Vérifier le statut du scooter", label: "Entrez le code du scooter", alertMsg: "Aucun scooter trouvé avec ce code." },
-                IT: { title: "Verifica Stato Scooter", label: "Inserisci il Codice Scooter", alertMsg: "Nessun scooter trovato con questo codice." },
-                DE: { title: "Scooterstatus überprüfen", label: "Scooter-Code eingeben", alertMsg: "Kein Scooter mit diesem Code gefunden." }
+                EN: { title: "Verify Scooter Status", label: "Enter Scooter Code", alertMsg: "No scooter found with this code.", button: "Verify", tooltip: "Code starting with 'SCOOT' followed by two digits (e.g., SCOOT01)", detailsTitle: "Details", name: "Name", returnDate: "Return Date", returnTime: "Return Time", status: "Status" },
+                FR: { title: "Vérifier le statut du scooter", label: "Entrez le code du scooter", alertMsg: "Aucun scooter trouvé avec ce code.", button: "Vérifier", tooltip: "Code commençant par 'SCOOT' suivi de deux chiffres (ex. SCOOT01)", detailsTitle: "Détails", name: "Nom", returnDate: "Date de retour", returnTime: "Heure de retour", status: "Statut" },
+                IT: { title: "Verifica Stato Scooter", label: "Inserisci il Codice Scooter", alertMsg: "Nessun scooter trovato con questo codice.", button: "Verifica", tooltip: "Codice formato da 'SCOOT' seguito da due cifre (es. SCOOT01)", detailsTitle: "Dettagli", name: "Nome", returnDate: "Data di Ritorno", returnTime: "Orario di Ritorno", status: "Stato" },
+                DE: { title: "Scooterstatus überprüfen", label: "Scooter-Code eingeben", alertMsg: "Kein Scooter mit diesem Code gefunden.", button: "Überprüfen", tooltip: "Code beginnt mit 'SCOOT' gefolgt von zwei Ziffern (z.B. SCOOT01)", detailsTitle: "Einzelheiten", name: "Name", returnDate: "Rückgabedatum", returnTime: "Rückgabezeit", status: "Status" }
             };
 
             document.getElementById('mainTitle').textContent = texts[lang].title;
             document.getElementById('inputLabel').textContent = texts[lang].label;
             document.getElementById('inputLabel').dataset.alertMsg = texts[lang].alertMsg;
+            document.getElementById('scooterCodeInput').placeholder = lang === 'IT' ? 'SCOOTXX' : texts[lang].label.split(' ')[1];
+            document.getElementById('verifyButton').textContent = texts[lang].button;
+            document.getElementById('tooltipText').textContent = texts[lang].tooltip;
+            document.getElementById('detailsTitle').textContent = texts[lang].detailsTitle;
+            document.getElementById('scooterNameLabel').textContent = texts[lang].name;
+            document.getElementById('scooterReturnDateLabel').textContent = texts[lang].returnDate;
+            document.getElementById('scooterReturnTimeLabel').textContent = texts[lang].returnTime;
+            document.getElementById('scooterStatusLabel').textContent = texts[lang].status;
+        }
+
+        function toggleLanguageDropdown() {
+            var languageSelect = document.getElementById('languageSelect');
+            languageSelect.classList.toggle('hidden');
         }
 
         function updateCurrentTime() {
